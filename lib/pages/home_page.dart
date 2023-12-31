@@ -1,7 +1,11 @@
+import 'package:chewie/chewie.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:trending_video_app/controller/home_controller.dart';
+import 'package:trending_video_app/widget/video_player.dart';
+import 'package:video_player/video_player.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -51,8 +57,9 @@ class _HomePageState extends State<HomePage> {
                                 width: Get.width,
                                 color: Colors.grey,
                                 alignment: Alignment.center,
-                                child: Text(
-                                    "Video"
+                                child: VideoPlayerWidget(
+                                  videoUrl: '${data['manifest']}',
+
                                 ),
                               ),
                               Container(
