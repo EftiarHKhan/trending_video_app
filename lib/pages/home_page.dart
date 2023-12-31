@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:trending_video_app/controller/home_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +13,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+
+    HomeController mvc = Get.find<HomeController>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -28,83 +32,84 @@ class _HomePageState extends State<HomePage> {
           physics: ClampingScrollPhysics(),
           child: Column(
             children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: 10,
-                  itemBuilder: (context, int index){
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 0,vertical: 4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: Get.height * .2,
-                            width: Get.width,
-                            color: Colors.grey,
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Video"
-                            ),
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: CircleAvatar(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
-                                          color: Colors.green.shade100
-                                      ),
-                                      height: 40,
-                                      width: 40,
-                                    ),
-                                  ),
+              Obx(()=>
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: mvc.videoList.length,
+                      itemBuilder: (context, int index){
+
+                        var data = mvc.videoList[index];
+
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 0,vertical: 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: Get.height * .2,
+                                width: Get.width,
+                                color: Colors.grey,
+                                alignment: Alignment.center,
+                                child: Text(
+                                    "Video"
                                 ),
-                                 Expanded(
-                                   flex: 4,
-                                   child: Column(
-                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Arab Neta shghskj shkgshg sjghfskgh s",
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w600,
-                                          overflow: TextOverflow.ellipsis
-                                        ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: CircleAvatar(
+                                        backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
+                                        radius: 30,
                                       ),
-                                      8.height,
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    ),
+                                    16.width,
+                                    Expanded(
+                                      flex: 4,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("53,245 views"),
-                                          Text("Feb 21, 2021")
+                                          Text(data['title'].toString(),
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                                overflow: TextOverflow.ellipsis
+                                            ),
+                                          ),
+                                          8.height,
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text("${data['viewers'].toString()} views"),
+                                              Text("${data['date_and_time'].toString().substring(0,10)}")
+                                            ],
+                                          ),
+
                                         ],
                                       ),
+                                    ),
+                                    16.width,
+                                    Expanded(
+                                      child: InkWell(
+                                        onTap: (){
 
-                                    ],
-                                                                 ),
-                                 ),
-                                Expanded(
-                                  child: InkWell(
-                                    onTap: (){
+                                        },
+                                        child: Icon(Icons.more_vert_sharp, size: 24,),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
 
-                                    },
-                                    child: Icon(Icons.more_vert_sharp, size: 24,),
-                                  ),
-                                )
-                              ],
-                            ),
+                            ],
                           ),
-
-                        ],
-                      ),
-                    );
-              })
+                        );
+                      })
+              )
             ],
           ),
         )
