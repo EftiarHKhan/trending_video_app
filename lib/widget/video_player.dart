@@ -41,6 +41,29 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       aspectRatio: widget.aspectRatio ?? 16 / 9,
       autoInitialize: true,
       looping: false,
+      showControls: true,
+      showControlsOnInitialize: true,
+      showOptions: false,
+      materialProgressColors: ChewieProgressColors(
+        playedColor: Colors.red,
+        handleColor: Colors.redAccent,
+        backgroundColor: Colors.grey.shade200,
+        bufferedColor: Colors.grey.shade200,
+
+      ),
+      draggableProgressBar: true,
+      allowPlaybackSpeedChanging: true,
+      placeholder: Container(
+        color: Colors.black,
+        child: Center(
+          child: Icon(
+            Icons.play_circle_outline,
+            color: Colors.white,
+            size: 50,
+          ),
+        ),
+      ),
+
     );
   }
 
