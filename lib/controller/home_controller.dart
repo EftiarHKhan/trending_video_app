@@ -16,7 +16,6 @@ class HomeController extends GetxController{
 
 @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     fetchVideoList();
   }
@@ -25,13 +24,12 @@ class HomeController extends GetxController{
     var video = await apiProvider.getVideoList(currentPage.toString());
     if (video?['results'] != null) {
       videoList.addAll(video?['results']!);
-      currentPage++; // Set currentPage to the last page number
+      currentPage++;
     }
 
-
     videoList.value = video?['results']!;
-    print("Video list from API: ");
-    print(videoList);
+
+    print("Video list from API: " + videoList.toString());
     print("video list length: " + videoList.length.toString());
   }
 

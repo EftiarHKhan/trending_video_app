@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -20,10 +22,7 @@ class _DetailsVideoPageState extends State<DetailsVideoPage> {
     HomeController mvc = Get.find<HomeController>();
 
     var data = widget.videoData;
-
     print("Video details : ${data}");
-
-
 
     return WillPopScope(
       onWillPop: () async{
@@ -31,266 +30,329 @@ class _DetailsVideoPageState extends State<DetailsVideoPage> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: Color(0xFFF7FAFC),
         body: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  height: 210,
-                  width: Get.width,
-                  child:
-                      VideoPlayerWidget(
-                        videoUrl: '${data['manifest']}',
-                      ),
-
-              ),
-              16.height,
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
+          child: SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
                   children: [
-                    Text(
-                      data['title'].toString(),
-                      maxLines: 3,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    8.height,
-                    Row(
-                      children: [
-                        Text("${data['viewers'].toString()} views",
-                          style: TextStyle(
-                              fontSize: 12
-                          ),
+                    Container(
+                        height: 210,
+                        width: Get.width,
+                        alignment: Alignment.topCenter,
+                        child:
+                        Expanded(
+                          child: VideoPlayerWidget(
+                                videoUrl: '${data['manifest']}',
+                                thumbnailUrl: '${data['thumbnail']}',
+                              ),
                         ),
-                        16.width,
-                        Text("${mvc.calculateTimeDifference(DateTime.parse(data['date_and_time'].toString())).toString()} days ago",
-                          style: TextStyle(
-                              fontSize: 12
-                          ),
-                        ),
-                      ],
-                    ),
-                    8.height,
-                    Obx(()=>
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
 
-                            CardView(
-                              icon: mvc.isFavourite.value ? Icons.favorite : Icons.favorite_border_outlined,
-                              iconColor: mvc.isFavourite.value ? Colors.red : Colors.grey,
-                              text: "MASH ALLAH (12K)",
-                              ontap: (){
-                                mvc.isFavourite.value = !mvc.isFavourite.value;
-                              },
-                              flex: 5,
-                            ),
-                            8.width,
-                            CardView(
-                              icon: mvc.isLiked.value ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
-                              iconColor: mvc.isLiked.value ? Colors.blue : Colors.grey,
-                              text: "Like (12K)",
-                              ontap: (){
-                                mvc.isLiked.value = !mvc.isLiked.value;
-                              },
-                              flex: 4,
-                            ),
-                            8.width,
-                            CardView(
-                              icon: Icons.share_outlined,
-                              iconColor: Colors.grey,
-                              text: "SHARE",
-                              ontap: (){
-                                toast("Share");
-                              },
-                              flex: 3,
-                            ),
-                            8.width,
-                            CardView(
-                              icon: Icons.flag_outlined,
-                              iconColor: Colors.grey,
-                              text: "REPORT",
-                              ontap: (){
-                                toast("Report");
-                              },
-                              flex: 3,
-                            ),
-
-                          ],
-                        ),
                     ),
-                    16.height,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
-                              radius: 20,
-                            ),
-                            8.width,
-                            Column(
-                              children: [
-                                Text(data['channel_name'].toString(), style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600
-                                ),),
-                                Text("${data['channel_subscriber'].toString()} Subscribers", style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w200
-                                ),),
-
-                              ],
-                            ),
-                          ],
-                        ),
-                        8.width,
-                        InkWell(
+                    Positioned(
+                      top: 16,
+                        left: 16,
+                        child: InkWell(
                           onTap: (){
-                            toast("Subscribed");
+                            Get.back();
                           },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                color: Colors.blue
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(Icons.add, color: Colors.white,),
-                                4.width,
-                                Text("Subscribe", style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16
-                                ),)
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                            child: Icon(Icons.arrow_back_outlined, color: Colors.grey.shade600,))
                     ),
                   ],
                 ),
-              ),
-              16.height,
-              Divider(
-                color: Colors.grey,
-                thickness: 1,
-              ),
-              16.height,
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
+                16.height,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        utf8.decode(data['title'].toString().codeUnits),
+                        maxLines: 3,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey.shade900,
+                          fontWeight: FontWeight.w600,
+                          height: 1.5
+                        ),
+                      ),
+                      8.height,
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Comments 7.5k",
+                          Text("${data['viewers'].toString()} views",
                             style: TextStyle(
-                                fontSize: 12
+                                fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              height: 1.4,
+                              color: Colors.grey.shade600,
+                              fontFamily: "Poppins"
                             ),
                           ),
-                          Container(
-                            child: Column(
-                              children: [
-                                InkWell(
-                                    onTap: (){},
-                                    child:  Icon(Icons.keyboard_arrow_up, size: 12,)
-                                ),
-                                InkWell(
-                                    onTap: (){},
-                                    child:  Icon(Icons.keyboard_arrow_down, size: 12,)
-                                ),
-                              ],
+                          16.width,
+                          Text("${mvc.calculateTimeDifference(DateTime.parse(data['date_and_time'].toString())).toString()} days ago",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                height: 1.4,
+                                color: Colors.grey.shade600,
+                                fontFamily: "Poppins"
                             ),
                           ),
                         ],
                       ),
                       16.height,
-                      TextFormField(
-                        decoration: InputDecoration(
-                            hintText: "Add Comment",
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                )
-                            ),
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                )
-                            ),
-                            suffixIcon: InkWell(
-                              onTap: (){
+                      Obx(()=>
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
 
-                              },
-                              child: Icon(Icons.send),
-                            )
-                        ),
+                              CardView(
+                                icon: mvc.isFavourite.value ? Icons.favorite : Icons.favorite_border_outlined,
+                                iconColor: mvc.isFavourite.value ? Colors.red : Colors.grey.shade600,
+                                text: "MASH ALLAH (12K)",
+                                ontap: (){
+                                  mvc.isFavourite.value = !mvc.isFavourite.value;
+                                },
+                                flex: 6,
+                              ),
+                              8.width,
+                              CardView(
+                                icon: mvc.isLiked.value ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+                                iconColor: mvc.isLiked.value ? Colors.blue : Colors.grey.shade600,
+                                text: "Like (12K)",
+                                ontap: (){
+                                  mvc.isLiked.value = !mvc.isLiked.value;
+                                },
+                                flex: 4,
+                              ),
+                              8.width,
+                              CardView(
+                                icon: Icons.share_outlined,
+                                iconColor: Colors.grey.shade600,
+                                text: "SHARE",
+                                ontap: (){
+                                  toast("Share");
+                                },
+                                flex: 3,
+                              ),
+                              8.width,
+                              CardView(
+                                icon: Icons.flag_outlined,
+                                iconColor: Colors.grey.shade600,
+                                text: "REPORT",
+                                ontap: (){
+                                  toast("Report");
+                                },
+                                flex: 3,
+                              ),
+
+                            ],
+                          ),
                       ),
                       16.height,
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
-                            radius: 16,
-                          ),
-                          8.width,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                              CircleAvatar(
+                                backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
+                                radius: 20,
+                              ),
+                              8.width,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Fahmida Khanom", style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.black,
-                                    height: 1
+                                  Text(data['channel_name'].toString(), style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    fontFamily: "Poppins",
+                                    color: Colors.grey.shade900,
+                                    height: 1.5
                                   ),),
-                                  8.width,
-                                  Text("2 days ago", style: TextStyle(
+                                  Text("${data['channel_subscriber'].toString()} Subscribers", style: TextStyle(
                                       fontSize: 10,
-                                      fontWeight: FontWeight.w200,
-                                      color: Colors.grey,
-                                    height: 1
+                                      fontWeight: FontWeight.w400,
+                                    color: Colors.grey.shade600,
+                                    fontFamily: "Poppins",
                                   ),),
 
                                 ],
                               ),
-                              8.height,
-                              Text("I love this video. It makes me happy",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.black,
-                                    overflow: TextOverflow.ellipsis
-                                ),),
                             ],
                           ),
-
+                          8.width,
+                          InkWell(
+                            onTap: (){
+                              toast("Subscribed");
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: Color(0xFF3898FC)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add, color: Colors.white, size: 16,),
+                                  8.width,
+                                  const Text("Subscribe", style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.5
+                                  ),)
+                                ],
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                16.height,
+                Divider(
+                  color: Colors.grey.shade300,
+                  thickness: 1,
+                ),
+                16.height,
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Comments  7.5k",
+                              style: TextStyle(
+                                  fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                height: 1.5,
+                                color: Colors.grey.shade600,
+                                fontFamily: "Poppins"
+                              ),
+                            ),
+                            Container(
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                      onTap: (){},
+                                      child:  Icon(Icons.keyboard_arrow_up, size: 8, weight: 4, color: Colors.grey.shade600,)
+                                  ),
+                                  InkWell(
+                                      onTap: (){},
+                                      child:  Icon(Icons.keyboard_arrow_down, size: 8,weight: 4, color: Colors.grey.shade600,)
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        10.height,
+                        TextFormField(
+                          decoration: InputDecoration(
+                              hintText: "Add Comment",
+                              hintStyle: TextStyle(
+                                color: Colors.grey.shade400,
+                                fontSize: 12,
+                                height: 1,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Poppins"
+                              ),
+                              fillColor: Colors.white,
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  )
+                              ),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  )
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey.shade300,
+                                  )
+                              ),
+                              suffixIcon: InkWell(
+                                onTap: (){
+
+                                },
+                                child: Icon(Icons.send, color: Colors.grey.shade500,),
+                              )
+                          ),
+                        ),
+                        16.height,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
+                              radius: 16,
+                            ),
+                            8.width,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text("Fahmida Khanom", style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey.shade600,
+                                      fontFamily: "Poppins",
+                                      height: 1
+                                    ),),
+                                    8.width,
+                                    Text("2 days ago", style: TextStyle(
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey.shade600,
+                                      height: 1
+                                    ),),
+
+                                  ],
+                                ),
+                                8.height,
+                                Container(
+                                  width: Get.width * .8,
+                                  child: Text("হুজুরের বক্তব্য গুলো ইংরেজি তে অনুবাদ করে সারা পৃথিবীর মানুষদের কে শুনিয়ে দিতে হবে। কথা গুলো খুব দামি",
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey.shade700,
+                                        overflow: TextOverflow.ellipsis,
+                                      fontFamily: "Hind Siliguri"
+                                    ),),
+                                ),
+                              ],
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

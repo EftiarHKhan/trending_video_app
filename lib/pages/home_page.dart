@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -21,11 +23,13 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Trending Videos",
           style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w600
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            height: 1.2,
+            color: Colors.grey.shade900
           ),
         ),
       ),
@@ -46,14 +50,9 @@ class _HomePageState extends State<HomePage> {
 
                         return InkWell(
                           onTap: (){
-                            //mvc.stopVideoPlayback();
                             print("Video url in homepage: ${data['manifest']}");
                             mvc.selectedVideoIndex.value = index;
                             Get.to(DetailsVideoPage(videoData: data,));
-                              /*mvc.selectedVideoIndex.value = index;
-                              showBottomSheet(context: context, builder: (context){
-                                return DetailsVideoPage();
-                              });*/
 
                           },
                           child: Container(
@@ -63,59 +62,86 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  height: Get.height * .2,
+                                  height: 192,
                                   width: Get.width,
-                                  color: Colors.grey,
                                   alignment: Alignment.center,
-                                  child: VideoPlayerWidget(
-                                    videoUrl: '${data['manifest']}',
+                                  child: Expanded(
+                                    child: VideoPlayerWidget(
+                                      videoUrl: '${data['manifest']}',
+                                      thumbnailUrl: '${data['thumbnail']}',
 
+                                    ),
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  padding: EdgeInsets.only(top: 16, bottom: 16, left: 16, right: 8),
+                                  //padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
                                         child: CircleAvatar(
                                           backgroundImage: NetworkImage("${data['channel_image'].toString()}"),
-                                          radius: 30,
+                                          radius: 24,
                                         ),
                                       ),
-                                      16.width,
+                                      12.width,
                                       Expanded(
                                         flex: 4,
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text(data['title'].toString(),
+                                            Text(
+                                              utf8.decode(data['title'].toString().codeUnits),
                                               maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
+                                              style: const TextStyle(
+                                                  color: Color(0xFF1A202C),
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600,
-                                                  overflow: TextOverflow.ellipsis
+                                                  overflow: TextOverflow.ellipsis,
+                                                height: 1.5,
                                               ),
                                             ),
                                             8.height,
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
-                                                Text("${data['viewers'].toString()} views"),
-                                                Text(mvc.formatDate(DateTime.parse(data['date_and_time'])))
+                                                Text("${data['viewers'].toString()} views",
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                  color: Color(0xFF718096),
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: "Inter",
+                                                  height: 1.2
+                                                ),
+                                                ),
+                                                16.width,
+                                                Text(mvc.formatDate(DateTime.parse(data['date_and_time'])),
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                      color: Color(0xFF718096),
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontFamily: "Inter",
+                                                      height: 1.2
+                                                  ),
+                                                )
                                               ],
                                             ),
 
                                           ],
                                         ),
                                       ),
-                                      16.width,
                                       Expanded(
                                         child: InkWell(
                                           onTap: (){
-
+                                            toast("More");
                                           },
-                                          child: Icon(Icons.more_vert_sharp, size: 24,),
+                                          child: Container(
+                                            alignment: Alignment.topRight,
+                                              child: Icon(Icons.more_vert_sharp, size: 24, color: Color(0xFFCBD5E0),)),
                                         ),
                                       )
                                     ],

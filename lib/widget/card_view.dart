@@ -22,12 +22,12 @@ class CardView extends StatelessWidget {
       child: InkWell(
         onTap: ontap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+          padding: EdgeInsets.symmetric(horizontal: 8,vertical: 6),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.grey,
+              color: Colors.grey.shade300,
               width: 1
             )
           ),
@@ -35,10 +35,15 @@ class CardView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(icon, color: iconColor, size: 18,),
+              Icon(icon, color: iconColor, size: 24,),
               4.height,
-              Text(text, style: TextStyle(
-                fontSize: 10
+              Text(text,
+                maxLines: 1,
+                style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: Colors.grey.shade600,
+                  overflow: TextOverflow.ellipsis
               ),)
             ],
           ),

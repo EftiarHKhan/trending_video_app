@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:trending_video_app/controller/home_controller.dart';
 import 'package:trending_video_app/pages/home_page.dart';
@@ -16,12 +17,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeController mvc = Get.put(HomeController());
+    // Lock the device orientation to portrait
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return GetMaterialApp(
       title: 'Trending Video app',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.transparent),
         useMaterial3: true,
       ),
+      debugShowCheckedModeBanner: false,
       home: HomePage(),
     );
   }
