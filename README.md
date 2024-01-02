@@ -1,10 +1,18 @@
-# Project Name
+# Trending video application
 
-Project Description
+
+The Trending Video Application is a mobile platform designed to deliver the latest and most popular videos effortlessly. With a pixel-perfect user interface, intuitive navigation, and seamless pagination, users can explore a curated selection of trending videos in real-time. The app employs an efficient video player library, enabling smooth playback without additional API calls for video details. 
 
 ## Overview
 
 This Flutter project utilizes the GetX state management library to build a mobile application for watching trending videos. The application consists of two main screens: the Home Page and the Details Video Page.
+
+## Screnshots
+
+![home page](https://github.com/EftiarHKhan/trending_video_app/assets/105238792/e66a1161-49b0-4699-9d3c-5da2a795b415)
+
+![Video detail page](https://github.com/EftiarHKhan/trending_video_app/assets/105238792/88ee67b8-2c3a-4cd7-86b9-892e45c02bd5)
+
 
 ## Features
 
@@ -47,8 +55,7 @@ This Flutter project utilizes the GetX state management library to build a mobil
 ## Future Enhancements
 
 - Enhance the user interface for a more polished look.
-- Testing is remaining
-- Project is still under development
+
 
 ## Contributors
 
